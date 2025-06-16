@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+<%- include('partials/header', { title: 'Registrer deg', description: 'Opprett en ny superhelt-konto' }) %>
+
+<div class="form-container">
+    <h1>Opprett konto</h1>
+    
+    <% if (error) { %>
+        <div class="error-message" role="alert">
+            <%= error %>
+        </div>
+    <% } %>
+    
+    <form method="POST" action="/register">
+        <div class="form-group">
+            <label for="username">Brukernavn:</label>
+            <input type="text" id="username" name="username" required 
+                   placeholder="Velg et brukernavn"
+                   minlength="3"
+                   aria-describedby="username-help">
+            <small id="username-help" class="form-help">Minimum 3 tegn</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="epost">E-postadresse:</label>
+            <input type="email" id="epost" name="epost" required 
+                   placeholder="din@epost.no"
+                   aria-describedby="email-help">
+            <small id="email-help" class="form-help">Vi sender aldri spam</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="passord">Passord:</label>
+            <input type="password" id="passord" name="passord" required 
+                   placeholder="Velg et sikkert passord"
+                   minlength="6"
+                   aria-describedby="password-help">
+            <small id="password-help" class="form-help">Minimum 6 tegn</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="confirmPassword">Bekreft passord:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required 
+                   placeholder="Gjenta passordet"
+                   minlength="6"
+                   aria-describedby="confirm-help">
+            <small id="confirm-help" class="form-help">Må være identisk med passordet over</small>
+        </div>
+        
+        <button type="submit" class="btn">Opprett konto</button>
+    </form>
+    
+    <div class="form-links">
+        <p>Har du allerede en konto? <a href="/login">Logg inn her</a></p>
+        <p><a href="/">Tilbake til hjemmesiden</a></p>
+    </div>
+</div>
+
+</main>
+</body>
+</html>

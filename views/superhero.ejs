@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detaljert informasjon om <%= superhero.name %> - <%= superhero.publisher %>. Se krefter, utseende, biografi og mer.">
+    <title><%= title %> - Superheltdetaljer</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Hopp til hovedinnhold</a>
+    
+    <header class="header" role="banner">
+        <nav class="nav-links" role="navigation" aria-label="Hovednavigasjon">
+            <a href="/">🏠 Hjem</a>
+            <% if (!isAuthenticated) { %>
+                <a href="/login">Logg inn</a>
+                <a href="/register">Registrer</a>
+            <% } else { %>
+                <a href="/profile">Profil</a>
+                <% if (isAdmin) { %>
+                    <a href="/admin/users">Admin</a>
+                <% } %>
+                <a href="/logout">Logg ut</a>
+            <% } %>
+        </nav>
+    </header>
+
+    <main id="main-content" class="container" role="main">
+        <a href="/" class="back-btn" aria-label="Tilbake til alle helter">← Tilbake til alle helter</a>
+        
+        <article class="hero-main">
+            <header class="hero-header">
+                <img src="<%= superhero.image %>" 
+                     alt="Fullstørrelse bilde av <%= superhero.name %>" 
+                     class="hero-detail-image"
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjRjBGMEYwIi8+Cjx0ZXh0IHg9IjE1MCIgeT0iMjAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0iY2VudHJhbCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE4IiBmaWxsPSIjOTk5Ij5JbmdlbiBiaWxkZTwvdGV4dD4KPC9zdmc+';this.alt='Ingen bilde tilgjengelig for <%= superhero.name %>'">
+                
+                <div class="hero-info">
+                    <h1><%= superhero.name %></h1>
+                    <% if (superhero.biography.fullName && superhero.biography.fullName !== superhero.name) { %>
+                        <p class="hero-fullname">Ekte navn: <%= superhero.biography.fullName %></p>
+                    <% } %>
+                    <span class="hero-publisher"><%= superhero.publisher %></span>
+                    
+                    <section class="powerstats-section" aria-labelledby="powers-heading">
+                        <h2 id="powers-heading">Kraftstatistikk</h2>
+                        <div class="powerstats-grid">
+                            <div class="powerstat-card">
+                                <div class="powerstat-label">Intelligens</div>
+                                <div class="powerstat-value" aria-label="<%= superhero.powerstats.intelligence %> av 100">
+                                    <%= superhero.powerstats.intelligence %>
+                                </div>
+                            </div>
+                            <div class="powerstat-card">
+                                <div class="powerstat-label">Styrke</div>
+                                <div class="powerstat-value" aria-label="<%= superhero.powerstats.strength %> av 100">
+                                    <%= superhero.powerstats.strength %>
+                                </div>
+                            </div>
+                            <div class="powerstat-card">
+                                <div class="powerstat-label">Hastighet</div>
+                                <div class="powerstat-value" aria-label="<%= superhero.powerstats.speed %> av 100">
+                                    <%= superhero.powerstats.speed %>
+                                </div>
+                            </div>
+                            <div class="powerstat-card">
+                                <div class="powerstat-label">Utholdenhet</div>
+                                <div class="powerstat-value" aria-label="<%= superhero.powerstats.durability %> av 100">
+                                    <%= superhero.powerstats.durability %>
+                                </div>
+                            </div>
+                            <div class="powerstat-card">
+                                <div class="powerstat-label">Kraft</div>
+                                <div class="powerstat-value" aria-label="<%= superhero.powerstats.power %> av 100">
+                                    <%= superhero.powerstats.power %>
+                                </div>
+                            </div>
+                            <div class="powerstat-card">
+                                <div class="powerstat-label">Kamp</div>
+                                <div class="powerstat-value" aria-label="<%= superhero.powerstats.combat %> av 100">
+                                    <%= superhero.powerstats.combat %>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </header>
+            
+            <section class="details-section">
+                <div class="detail-card">
+                    <h3>🧬 Biografi</h3>
+                    <% if (superhero.biography.alterEgos && superhero.biography.alterEgos !== 'No alter egos found.') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Alternative identiteter:</span>
+                            <span class="detail-value"><%= superhero.biography.alterEgos %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.biography.placeOfBirth && superhero.biography.placeOfBirth !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Fødested:</span>
+                            <span class="detail-value"><%= superhero.biography.placeOfBirth %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.biography.firstAppearance && superhero.biography.firstAppearance !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Første opptreden:</span>
+                            <span class="detail-value"><%= superhero.biography.firstAppearance %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.biography.alignment && superhero.biography.alignment !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Tilhørighet:</span>
+                            <span class="detail-value"><%= superhero.biography.alignment %></span>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <div class="detail-card">
+                    <h3>👤 Utseende</h3>
+                    <% if (superhero.appearance.gender && superhero.appearance.gender !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Kjønn:</span>
+                            <span class="detail-value"><%= superhero.appearance.gender %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.appearance.race && superhero.appearance.race !== '-' && superhero.appearance.race !== 'null') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Rase:</span>
+                            <span class="detail-value"><%= superhero.appearance.race %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.appearance.height && superhero.appearance.height.length > 0 && superhero.appearance.height[0] !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Høyde:</span>
+                            <span class="detail-value"><%= superhero.appearance.height.join(', ') %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.appearance.weight && superhero.appearance.weight.length > 0 && superhero.appearance.weight[0] !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Vekt:</span>
+                            <span class="detail-value"><%= superhero.appearance.weight.join(', ') %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.appearance.eyeColor && superhero.appearance.eyeColor !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Øyenfarge:</span>
+                            <span class="detail-value"><%= superhero.appearance.eyeColor %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.appearance.hairColor && superhero.appearance.hairColor !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Hårfarge:</span>
+                            <span class="detail-value"><%= superhero.appearance.hairColor %></span>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <div class="detail-card">
+                    <h3>💼 Arbeid</h3>
+                    <% if (superhero.work.occupation && superhero.work.occupation !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Yrke:</span>
+                            <span class="detail-value"><%= superhero.work.occupation %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.work.base && superhero.work.base !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Base:</span>
+                            <span class="detail-value"><%= superhero.work.base %></span>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <div class="detail-card">
+                    <h3>🔗 Tilkoblinger</h3>
+                    <% if (superhero.connections.groupAffiliation && superhero.connections.groupAffiliation !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Gruppeaffiliasjon:</span>
+                            <span class="detail-value"><%= superhero.connections.groupAffiliation %></span>
+                        </div>
+                    <% } %>
+                    <% if (superhero.connections.relatives && superhero.connections.relatives !== '-') { %>
+                        <div class="detail-item">
+                            <span class="detail-label">Slektninger:</span>
+                            <span class="detail-value"><%= superhero.connections.relatives %></span>
+                        </div>
+                    <% } %>
+                </div>
+            </section>
+        </article>
+        
+        <% if (relatedHeroes && relatedHeroes.length > 0) { %>
+            <section class="related-heroes" aria-labelledby="related-heading">
+                <h2 id="related-heading">Flere <%= superhero.publisher %> helter</h2>
+                <div class="related-grid">
+                    <% relatedHeroes.forEach(hero => { %>
+                        <article class="related-card" 
+                                onclick="window.location.href='/superhero/<%= hero._id %>'"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero._id %>'}"
+                                tabindex="0"
+                                role="button"
+                                aria-label="Se detaljer for <%= hero.name %>">
+                            <img src="<%= hero.image %>" 
+                                 alt="Bilde av <%= hero.name %>" 
+                                 class="related-image"
+                                 loading="lazy"
+                                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDIwMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRjBGMEYwIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iNjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM5OTkiPkluZ2VuIGJpbGRlPC90ZXh0Pgo8L3N2Zz4=';this.alt='Ingen bilde tilgjengelig for <%= hero.name %>'">
+                            <h4><%= hero.name %></h4>
+                        </article>
+                    <% }) %>
+                </div>
+            </section>
+        <% } %>
+    </main>
+</body>
+</html>

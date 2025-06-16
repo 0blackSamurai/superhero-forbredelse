@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+<%- include('partials/header', { title: 'Logg inn', description: 'Logg inn på din superhelt-konto' }) %>
+
+<div class="form-container">
+    <h1>Logg inn</h1>
+    
+    <% if (error) { %>
+        <div class="error-message" role="alert">
+            <%= error %>
+        </div>
+    <% } %>
+    
+    <form method="POST" action="/login">
+        <div class="form-group">
+            <label for="username">Brukernavn eller e-post:</label>
+            <input type="text" id="username" name="username" required 
+                   placeholder="Skriv inn brukernavn eller e-post"
+                   aria-describedby="username-help">
+            <small id="username-help" class="form-help">Du kan bruke enten brukernavn eller e-postadresse</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="passord">Passord:</label>
+            <input type="password" id="passord" name="passord" required 
+                   placeholder="Skriv inn passord"
+                   minlength="6">
+        </div>
+        
+        <button type="submit" class="btn">Logg inn</button>
+    </form>
+    
+    <div class="form-links">
+        <p>Har du ikke en konto? <a href="/register">Registrer deg her</a></p>
+        <p><a href="/">Tilbake til hjemmesiden</a></p>
+    </div>
+</div>
+
+</main>
+</body>
+</html>

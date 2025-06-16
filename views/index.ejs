@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Utforsk superhelter med detaljert informasjon, bilder og krefter. Søk gjennom vår database av over 700 superhelter.">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/header', { title: title, description: 'Utforsk superhelter med detaljert informasjon, bilder og krefter. Søk gjennom vår database av over 700 superhelter.' }) %>
+
+    <main id="main-content" class="container" role="main">
+        <!-- Search Section -->
+        <section class="search-section" aria-labelledby="search-heading">
+            <h2 id="search-heading" class="sr-only">Søk etter superhelter</h2>
+            <form class="search-form" method="GET" action="/" role="search">
+                <label for="search-input" class="sr-only">Søkeord</label>
+                <input 
+                    type="text" 
+                    id="search-input"
+                    name="search" 
+                    class="search-input" 
+                    placeholder="Søk etter superhelter..." 
+                    value="<%= search %>"
+                    aria-describedby="search-description"
+                >
+                <span id="search-description" class="sr-only">
+                    Søk etter navn, utgiver eller andre egenskaper
+                </span>
+                <button type="submit" class="search-btn" aria-label="Utfør søk">
+                    🔍 Søk
+                </button>
+                <% if (search) { %>
+                    <a href="/" class="search-btn" style="background: #ff6b6b;" aria-label="Fjern søkefilter">
+                        Fjern
+                    </a>
+                <% } %>
+            </form>
+        </section>
+
+        <!-- Results Info -->
+        <% if (typeof loading !== 'undefined' && loading) { %>
+            <div class="loading" role="status" aria-live="polite">
+                🚀 Laster superheltdatabase... Dette kan ta litt tid ved første besøk.
+                <br><small>Henter helter fra Superhero API...</small>
+            </div>
+        <% } else if (totalResults !== undefined) { %>
+            <div class="results-info" role="status" aria-live="polite">
+                <% if (search) { %>
+                    Fant <%= totalResults %> superhelt<%= totalResults !== 1 ? 'er' : '' %> som matcher "<%= search %>"
+                <% } else { %>
+                    Viser <%= totalResults %> superhelt<%= totalResults !== 1 ? 'er' : '' %> totalt
+                    <% if (superheroes && superheroes.length > 0) { %>
+                        (viser <%= superheroes.length %> på side <%= currentPage %> av <%= totalPages %>)
+                    <% } %>
+                <% } %>
+            </div>
+        <% } %>
+
+        <!-- Debug info for development -->
+        <% if (process.env.NODE_ENV !== 'production') { %>
+            <div class="debug-info">
+                <strong>Debug Info:</strong><br>
+                Total Results: <%= totalResults %><br>
+                Current Page: <%= currentPage %><br>
+                Total Pages: <%= totalPages %><br>
+                Heroes on this page: <%= superheroes ? superheroes.length : 0 %><br>
+                Search: "<%= search %>"<br>
+                <% if (error) { %>Error: <%= error %><br><% } %>
+            </div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="error-message" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <% if (superheroes && superheroes.length > 0) { %>
+            <section aria-labelledby="heroes-heading">
+                <h2 id="heroes-heading" class="sr-only">Superheltliste</h2>
+                <div class="superhero-grid">
+                    <% superheroes.forEach((hero, index) => { %>
+                        <article class="superhero-card" 
+                                onclick="window.location.href='/superhero/<%= hero._id %>'"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero._id %>'}"
+                                tabindex="0"
+                                role="button"
+                                aria-label="Se detaljer for <%= hero.name %>">
+                            
+                            <div class="hero-image-container">
+                                <img src="<%= hero.image %>" 
+                                     alt="Bilde av <%= hero.name %>" 
+                                     class="hero-image" 
+                                     loading="<%= index < 6 ? 'eager' : 'lazy' %>"
+                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjNjY3ZWVhLCAjNzY0YmEyKSIvPjx0ZXh0IHg9IjEwMCIgeT0iOTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0id2hpdGUiPvCfpbg8L3RleHQ+PHRleHQgeD0iMTAwIiB5PSIxMzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0id2hpdGUiPkluZ2VuIGJpbGRlPC90ZXh0Pjwvc3ZnPg==';this.alt='Ingen bilde tilgjengelig for <%= hero.name %>'">
+                            </div>
+                            
+                            <h3 class="hero-name"><%= hero.name %></h3>
+                            <p class="hero-publisher">Utgiver: <%= hero.publisher %></p>
+                            
+                            <div class="powerstats" aria-label="Kraftstatistikk for <%= hero.name %>">
+                                <div class="powerstat">
+                                    <span>Intelligens:</span>
+                                    <span class="powerstat-value" aria-label="<%= hero.powerstats.intelligence %> av 100">
+                                        <%= hero.powerstats.intelligence %>
+                                    </span>
+                                </div>
+                                <div class="powerstat">
+                                    <span>Styrke:</span>
+                                    <span class="powerstat-value" aria-label="<%= hero.powerstats.strength %> av 100">
+                                        <%= hero.powerstats.strength %>
+                                    </span>
+                                </div>
+                                <div class="powerstat">
+                                    <span>Hastighet:</span>
+                                    <span class="powerstat-value" aria-label="<%= hero.powerstats.speed %> av 100">
+                                        <%= hero.powerstats.speed %>
+                                    </span>
+                                </div>
+                                <div class="powerstat">
+                                    <span>Kamp:</span>
+                                    <span class="powerstat-value" aria-label="<%= hero.powerstats.combat %> av 100">
+                                        <%= hero.powerstats.combat %>
+                                    </span>
+                                </div>
+                            </div>
+                        </article>
+                    <% }) %>
+                </div>
+            </section>
+
+            <!-- Pagination -->
+            <% if (totalPages > 1) { %>
+                <nav class="pagination" role="navigation" aria-label="Sidenavigering">
+                    <% if (currentPage > 1) { %>
+                        <a href="?page=<%= currentPage - 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"
+                           aria-label="Gå til forrige side">
+                            ← Forrige
+                        </a>
+                    <% } %>
+                    
+                    <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+                        <% if (i === currentPage) { %>
+                            <span class="current" aria-current="page" aria-label="Nåværende side <%= i %>">
+                                <%= i %>
+                            </span>
+                        <% } else { %>
+                            <a href="?page=<%= i %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"
+                               aria-label="Gå til side <%= i %>">
+                                <%= i %>
+                            </a>
+                        <% } %>
+                    <% } %>
+                    
+                    <% if (currentPage < totalPages) { %>
+                        <a href="?page=<%= currentPage + 1 %><%= search ? '&search=' + encodeURIComponent(search) : '' %>"
+                           aria-label="Gå til neste side">
+                            Neste →
+                        </a>
+                    <% } %>
+                </nav>
+            <% } %>
+        <% } else if (!(typeof loading !== 'undefined' && loading)) { %>
+            <div class="loading" role="status" aria-live="polite">
+                <% if (search) { %>
+                    Ingen superhelter funnet som matcher "<%= search %>"
+                    <br><small><a href="/" style="color: white;">Fjern søk</a> for å se alle helter</small>
+                <% } else { %>
+                    Ingen superhelter tilgjengelige ennå.
+                    <br><small>Databasen kan være under opplasting. Vennligst oppdater siden om litt.</small>
+                    <br><button onclick="window.location.reload()" 
+                              aria-label="Oppdater siden for å laste nye superhelter">
+                        Oppdater side
+                    </button>
+                <% } %>
+            </div>
+        <% } %>
+    </main>
+    
+    <% if (typeof loading !== 'undefined' && loading) { %>
+    <script>
+        // Auto-refresh after 10 seconds if loading
+        setTimeout(() => {
+            window.location.reload();
+        }, 10000);
+        
+        // Add loading announcement for screen readers
+        const loadingAnnouncement = document.createElement('div');
+        loadingAnnouncement.setAttribute('aria-live', 'polite');
+        loadingAnnouncement.setAttribute('aria-atomic', 'true');
+        loadingAnnouncement.className = 'sr-only';
+        loadingAnnouncement.textContent = 'Laster superhelter, vennligst vent...';
+        document.body.appendChild(loadingAnnouncement);
+    </script>
+    <% } %>
+</body>
+</html>

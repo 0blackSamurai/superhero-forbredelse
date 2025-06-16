@@ -1,0 +1,34 @@
+<%- include('partials/header', { title: 'Min profil', description: 'Din superhelt-profil' }) %>
+
+<div class="profile-container">
+    <h1>🦸‍♂️ Profil</h1>
+    
+    <div class="profile-card">
+        <div class="profile-avatar">
+            🦸‍♂️
+        </div>
+        
+        <div class="profile-info">
+            <h2>Velkommen, <%= username %>!</h2>
+            <p class="profile-role">
+                <% if (isAdmin) { %>
+                    <span class="admin-badge">🛡️ Administrator</span>
+                <% } else { %>
+                    <span class="user-badge">👤 Bruker</span>
+                <% } %>
+            </p>
+        </div>
+        
+        <div class="profile-actions">
+            <a href="/" class="btn btn-primary">Utforsk superhelter</a>
+            <% if (isAdmin) { %>
+                <a href="/admin/users" class="btn btn-secondary">Admin panel</a>
+            <% } %>
+            <a href="/logout" class="btn btn-danger">Logg ut</a>
+        </div>
+    </div>
+</div>
+
+</main>
+</body>
+</html>

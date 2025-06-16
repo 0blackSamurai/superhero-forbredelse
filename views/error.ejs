@@ -1,0 +1,32 @@
+<%- include('partials/header', { title: title, description: 'En feil har oppstått' }) %>
+
+<div class="error-container">
+    <% if (error && error.status) { %>
+        <div class="status-code"><%= error.status %></div>
+    <% } else { %>
+        <div class="error-icon">⚠️</div>
+    <% } %>
+    
+    <div class="error-title"><%= title %></div>
+    <div class="error-message"><%= message %></div>
+    
+    <% if (error && error.stack && process.env.NODE_ENV === 'development') { %>
+        <div class="error-details">
+            <strong>Stack trace:</strong><br>
+            <%= error.stack %>
+        </div>
+    <% } %>
+    
+    <div class="nav-links">
+        <a href="/">🏠 Hjem</a>
+        <% if (!isAuthenticated) { %>
+            <a href="/login">🔐 Logg inn</a>
+        <% } else { %>
+            <a href="/profile">👤 Profil</a>
+        <% } %>
+    </div>
+</div>
+
+</main>
+</body>
+</html>
