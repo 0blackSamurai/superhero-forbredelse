@@ -58,18 +58,7 @@
             </div>
         <% } %>
 
-        <!-- Debug info for development -->
-        <% if (process.env.NODE_ENV !== 'production') { %>
-            <div class="debug-info">
-                <strong>Debug Info:</strong><br>
-                Total Results: <%= totalResults %><br>
-                Current Page: <%= currentPage %><br>
-                Total Pages: <%= totalPages %><br>
-                Heroes on this page: <%= superheroes ? superheroes.length : 0 %><br>
-                Search: "<%= search %>"<br>
-                <% if (error) { %>Error: <%= error %><br><% } %>
-            </div>
-        <% } %>
+        
 
         <% if (error) { %>
             <div class="error-message" role="alert">
@@ -83,8 +72,8 @@
                 <div class="superhero-grid">
                     <% superheroes.forEach((hero, index) => { %>
                         <article class="superhero-card" 
-                                onclick="window.location.href='/superhero/<%= hero._id %>'"
-                                onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero._id %>'}"
+                                onclick="window.location.href='/superhero/<%= hero.apiId %>'"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero.apiId %>'}"
                                 tabindex="0"
                                 role="button"
                                 aria-label="Se detaljer for <%= hero.name %>">

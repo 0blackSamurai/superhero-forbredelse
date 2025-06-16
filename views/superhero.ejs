@@ -196,8 +196,8 @@
                 <div class="related-grid">
                     <% relatedHeroes.forEach(hero => { %>
                         <article class="related-card" 
-                                onclick="window.location.href='/superhero/<%= hero._id %>'"
-                                onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero._id %>'}"
+                                onclick="window.location.href='/superhero/<%= hero.apiId %>'"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero.apiId %>'}"
                                 tabindex="0"
                                 role="button"
                                 aria-label="Se detaljer for <%= hero.name %>">

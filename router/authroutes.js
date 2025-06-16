@@ -245,22 +245,26 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Individual superhero route
+// Individual superhero route - Updated to use apiId primarily
 router.get('/superhero/:id', async (req, res) => {
   try {
     const superheroId = req.params.id;
     let superhero;
 
-    // Try to find by MongoDB _id first, then by apiId
-    if (superheroId.match(/^[0-9a-fA-F]{24}$/)) {
+    // Always try to find by apiId first (since it's shorter and what we're using in URLs)
+    const apiId = parseInt(superheroId);
+    if (!isNaN(apiId)) {
+      superhero = await Superhero.findOne({ apiId: apiId });
+    }
+    
+    // Only try MongoDB _id as fallback if it looks like a valid ObjectId
+    if (!superhero && superheroId.match(/^[0-9a-fA-F]{24}$/)) {
       superhero = await Superhero.findById(superheroId);
-    } else {
-      superhero = await Superhero.findOne({ apiId: parseInt(superheroId) });
     }
 
     if (!superhero) {
       // Try to fetch from API if not in database
-      superhero = await fetchAndStoreSuperhero(parseInt(superheroId));
+      superhero = await fetchAndStoreSuperhero(apiId);
     }
 
     if (!superhero) {
@@ -276,7 +280,7 @@ router.get('/superhero/:id', async (req, res) => {
 
     // Get 4 related superheroes from same publisher
     const relatedHeroes = await Superhero.find({
-      _id: { $ne: superhero._id },
+      apiId: { $ne: superhero.apiId }, // Use apiId instead of _id
       publisher: superhero.publisher
     }).limit(4);
 
