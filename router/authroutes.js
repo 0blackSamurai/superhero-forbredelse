@@ -77,65 +77,109 @@ async function fetchAndStoreSuperhero(id) {
 }
 
 // Function to seed database with superheroes (improved)
-async function seedSuperheroes(count = 50) {
+async function seedSuperheroes(count = 50, forceReseed = false) {
   try {
+    // Priority superheroes - main versions (Thor, Spider-Man, Batman, Iron Man, Superman)
+    const priorityHeroes = [
+      69,  // Thor
+      620, // Spider-Man
+      70,  // Batman
+      346, // Iron Man
+      644  // Superman
+    ];
+
     const existingCount = await Superhero.countDocuments();
     console.log(`Current superhero count: ${existingCount}`);
     
-    if (existingCount >= count) {
+    if (existingCount >= count && !forceReseed) {
       console.log(`Database already has ${existingCount} superheroes (target: ${count})`);
       return existingCount;
     }
 
     console.log(`Seeding ${count - existingCount} more superheroes...`);
     
-    // Create a set of random IDs to avoid duplicates
-    const existingApiIds = await Superhero.distinct('apiId');
-    const randomIds = new Set();
+    // Get existing API IDs to avoid duplicates (unless forcing reseed)
+    const existingApiIds = forceReseed ? [] : await Superhero.distinct('apiId');
     
-    // Generate unique random IDs
-    while (randomIds.size < (count - existingCount)) {
-      const randomId = Math.floor(Math.random() * 731) + 1;
-      if (!existingApiIds.includes(randomId)) {
-        randomIds.add(randomId);
-      }
-    }
-
-    console.log(`Generated ${randomIds.size} unique API IDs to fetch`);
-
-    // Fetch superheroes in smaller batches to avoid overwhelming the API
-    const batchSize = 5; // Reduced batch size for better reliability
-    const idArray = Array.from(randomIds);
-    let successCount = 0;
+    // First, ensure priority heroes are fetched
+    console.log('Fetching priority superheroes first...');
+    let prioritySuccessCount = 0;
     
-    for (let i = 0; i < idArray.length; i += batchSize) {
-      const batch = idArray.slice(i, i + batchSize);
-      console.log(`Processing batch ${Math.floor(i/batchSize) + 1}/${Math.ceil(idArray.length/batchSize)}: IDs ${batch.join(', ')}`);
-      
-      // Process batch sequentially for better reliability
-      for (const id of batch) {
+    for (const id of priorityHeroes) {
+      if (!existingApiIds.includes(id) || forceReseed) {
         try {
           const hero = await fetchAndStoreSuperhero(id);
           if (hero) {
-            successCount++;
-            console.log(`✓ Successfully stored: ${hero.name} (${successCount}/${idArray.length})`);
-          } else {
-            console.log(`✗ Failed to fetch hero with ID: ${id}`);
+            prioritySuccessCount++;
+            console.log(`✓ Priority hero stored: ${hero.name}`);
           }
+          // Small delay between requests
+          await new Promise(resolve => setTimeout(resolve, 500));
         } catch (error) {
-          console.error(`Error fetching hero ${id}:`, error.message);
+          console.error(`Error fetching priority hero ${id}:`, error.message);
+        }
+      } else {
+        console.log(`✓ Priority hero with ID ${id} already exists`);
+      }
+    }
+
+    // Check updated count after priority heroes
+    const updatedCount = await Superhero.countDocuments();
+    console.log(`After priority heroes: ${updatedCount} superheroes in database`);
+
+    // If we still need more heroes, fetch random ones
+    if (updatedCount < count) {
+      const remainingNeeded = count - updatedCount;
+      console.log(`Fetching ${remainingNeeded} additional random superheroes...`);
+      
+      // Create a set of random IDs to avoid duplicates
+      const updatedExistingApiIds = await Superhero.distinct('apiId');
+      const randomIds = new Set();
+      
+      // Generate unique random IDs (excluding priority heroes and existing ones)
+      while (randomIds.size < remainingNeeded) {
+        const randomId = Math.floor(Math.random() * 731) + 1;
+        if (!updatedExistingApiIds.includes(randomId) && !priorityHeroes.includes(randomId)) {
+          randomIds.add(randomId);
         }
       }
+
+      console.log(`Generated ${randomIds.size} unique random API IDs to fetch`);
+
+      // Fetch random superheroes in smaller batches
+      const batchSize = 5;
+      const idArray = Array.from(randomIds);
+      let successCount = 0;
       
-      // Longer delay between batches to be respectful to the API
-      if (i + batchSize < idArray.length) {
-        console.log('Waiting 2 seconds before next batch...');
-        await new Promise(resolve => setTimeout(resolve, 2000));
+      for (let i = 0; i < idArray.length; i += batchSize) {
+        const batch = idArray.slice(i, i + batchSize);
+        console.log(`Processing batch ${Math.floor(i/batchSize) + 1}/${Math.ceil(idArray.length/batchSize)}: IDs ${batch.join(', ')}`);
+        
+        // Process batch sequentially for better reliability
+        for (const id of batch) {
+          try {
+            const hero = await fetchAndStoreSuperhero(id);
+            if (hero) {
+              successCount++;
+              console.log(`✓ Successfully stored: ${hero.name} (${successCount}/${idArray.length})`);
+            } else {
+              console.log(`✗ Failed to fetch hero with ID: ${id}`);
+            }
+          } catch (error) {
+            console.error(`Error fetching hero ${id}:`, error.message);
+          }
+        }
+        
+        // Longer delay between batches to be respectful to the API
+        if (i + batchSize < idArray.length) {
+          console.log('Waiting 2 seconds before next batch...');
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
       }
     }
 
     const finalCount = await Superhero.countDocuments();
-    console.log(`Seeding complete. Successfully added ${successCount} heroes. Total in database: ${finalCount}`);
+    console.log(`Seeding complete. Total in database: ${finalCount}`);
     return finalCount;
   } catch (error) {
     console.error('Error in seedSuperheroes:', error);
@@ -189,9 +233,9 @@ router.get('/', async (req, res) => {
     console.log(`Query: ${JSON.stringify(query)}`);
     console.log(`Total results: ${totalResults}, Page: ${page}, Limit: ${limit}, Skip: ${skip}`);
 
-    // Get superheroes with pagination
+    // Get superheroes with pagination - sort by apiId to show priority heroes first
     const superheroes = await Superhero.find(query)
-      .sort({ name: 1 })
+      .sort({ apiId: 1 }) // Changed from name to apiId to show priority heroes first
       .skip(skip)
       .limit(limit);
 
@@ -472,6 +516,26 @@ router.post('/logout', (req, res) => {
 router.get('/logout', (req, res) => {
   res.clearCookie('user');
   res.redirect('/login');
+});
+
+// Add reroll route
+router.post('/reroll', async (req, res) => {
+  try {
+    console.log('🎲 Starting database reroll...');
+    
+    // Clear the database
+    await Superhero.deleteMany({});
+    console.log('✅ Database cleared');
+    
+    // Reseed with priority heroes first
+    await seedSuperheroes(50, true);
+    console.log('✅ Database reseeded with new superheroes');
+    
+    res.redirect('/?rerolled=true');
+  } catch (error) {
+    console.error('Error during reroll:', error);
+    res.redirect('/?error=reroll_failed');
+  }
 });
 
 module.exports = router;

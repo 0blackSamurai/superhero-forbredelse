@@ -1193,3 +1193,96 @@ body {
         margin-bottom: 1rem;
     }
 }
+
+/* Reroll section styling */
+.reroll-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.reroll-btn {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    min-width: 160px;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+}
+
+.reroll-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.reroll-btn:hover::before {
+    left: 100%;
+}
+
+.reroll-btn:hover,
+.reroll-btn:focus {
+    background: linear-gradient(135deg, #ee5a6f 0%, #dc3545 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    border-color: #ff6b6b;
+    outline: 2px solid #ff6b6b;
+    outline-offset: 2px;
+}
+
+.reroll-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.reroll-help {
+    display: block;
+    margin-top: 0.8rem;
+    color: #b0b0b0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive reroll button */
+@media (max-width: 768px) {
+    .reroll-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.95rem;
+        min-width: 140px;
+    }
+    
+    .reroll-help {
+        font-size: 0.8rem;
+        padding: 0 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .reroll-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        min-width: 120px;
+    }
+    
+    .reroll-section {
+        margin-top: 1rem;
+        padding-top: 1rem;
+    }
+}

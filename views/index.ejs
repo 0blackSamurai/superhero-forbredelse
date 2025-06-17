@@ -37,9 +37,33 @@
                     </a>
                 <% } %>
             </form>
+            
+            <!-- Reroll Section -->
+            <div class="reroll-section">
+                <form method="POST" action="/reroll" style="display: inline;">
+                    <button type="submit" class="reroll-btn" onclick="return confirm('Er du sikker på at du vil bytte ut alle superhelter? Dette vil fjerne alle nåværende helter og laste inn nye (Thor, Spider-Man, Batman, Iron Man og Superman vil alltid være med).')" aria-label="Bytt ut alle superhelter med nye">
+                        🎲 Bytt superhelter
+                    </button>
+                </form>
+                <small class="reroll-help">
+                    Bytter ut alle superhelter med nye tilfeldige helter. Thor, Spider-Man, Batman, Iron Man og Superman vil alltid være inkludert.
+                </small>
+            </div>
         </section>
 
         <!-- Results Info -->
+        <% if (typeof req !== 'undefined' && req.query && req.query.rerolled) { %>
+            <div class="success-message" role="alert">
+                ✅ Superhelter byttet ut! Nye helter er lastet inn.
+            </div>
+        <% } %>
+        
+        <% if (typeof req !== 'undefined' && req.query && req.query.error === 'reroll_failed') { %>
+            <div class="error-message" role="alert">
+                ❌ Kunne ikke bytte ut superhelter. Prøv igjen senere.
+            </div>
+        <% } %>
+
         <% if (typeof loading !== 'undefined' && loading) { %>
             <div class="loading" role="status" aria-live="polite">
                 🚀 Laster superheltdatabase... Dette kan ta litt tid ved første besøk.
