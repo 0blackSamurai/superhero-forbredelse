@@ -861,3 +861,335 @@ body {
         font-size: 0.8rem;
     }
 }
+
+/* Enhanced Button Styles - Dark Theme */
+.btn {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    min-width: 120px;
+    border: 2px solid transparent;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+/* Primary Button */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    border-color: #667eea;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    color: #fff;
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+.btn-primary:active {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #667eea;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* Danger Button */
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: #fff;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+    color: #fff;
+    outline: 2px solid #dc3545;
+    outline-offset: 2px;
+}
+
+/* Success Button */
+.btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: #fff;
+    border-color: #28a745;
+}
+
+.btn-success:hover,
+.btn-success:focus {
+    background: linear-gradient(135deg, #218838 0%, #1c7430 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+    color: #fff;
+    outline: 2px solid #28a745;
+    outline-offset: 2px;
+}
+
+/* Button sizes */
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    min-width: 100px;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    min-width: 150px;
+}
+
+/* Form submit button specific styling */
+.form-container .btn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* Form links styling */
+.form-links {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-links p {
+    margin: 0.5rem 0;
+    color: #b0b0b0;
+}
+
+.form-links a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.form-links a:hover,
+.form-links a:focus {
+    color: #fff;
+    background: rgba(102, 126, 234, 0.2);
+    transform: translateY(-1px);
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+/* Form help text */
+.form-help {
+    display: block;
+    margin-top: 0.3rem;
+    color: #b0b0b0;
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
+/* Profile actions styling */
+.profile-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.profile-actions .btn {
+    min-width: 160px;
+}
+
+/* Profile info styling */
+.profile-avatar {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.profile-email {
+    color: #b0b0b0;
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.profile-role {
+    margin: 1rem 0;
+}
+
+.user-badge {
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+/* Button group styling */
+.btn-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-group .btn {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* Responsive button adjustments */
+@media (max-width: 768px) {
+    .btn {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.95rem;
+        min-width: 100px;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .profile-actions .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        min-width: 90px;
+    }
+    
+    .form-container .btn {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+}
+
+/* Back button styling */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    font-size: 0.95rem;
+}
+
+.back-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.back-btn:hover::before {
+    left: 100%;
+}
+
+.back-btn:hover,
+.back-btn:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #667eea;
+    color: #fff;
+    transform: translateY(-2px) translateX(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+.back-btn:active {
+    transform: translateY(0) translateX(0);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+}
+
+/* Responsive back button */
+@media (max-width: 768px) {
+    .back-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+}
