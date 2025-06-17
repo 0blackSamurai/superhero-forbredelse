@@ -9,8 +9,6 @@ const setAuthStatus = async (req, res, next) => {
     
     if (!token) {
       res.locals.isAuthenticated = false;
-      res.locals.isAdmin = false;
-      res.locals.userRole = null;
       return next();
     }
 
@@ -19,8 +17,6 @@ const setAuthStatus = async (req, res, next) => {
       console.log('⚠️  MongoDB not connected, clearing auth cookie');
       res.clearCookie('user');
       res.locals.isAuthenticated = false;
-      res.locals.isAdmin = false;
-      res.locals.userRole = null;
       return next();
     }
 
@@ -30,14 +26,10 @@ const setAuthStatus = async (req, res, next) => {
     if (!user) {
       res.clearCookie('user');
       res.locals.isAuthenticated = false;
-      res.locals.isAdmin = false;
-      res.locals.userRole = null;
       return next();
     }
 
     res.locals.isAuthenticated = true;
-    res.locals.isAdmin = user.isAdmin;
-    res.locals.userRole = user.isAdmin ? 'Admin' : 'User';
     res.locals.username = user.username;
     
     next();
@@ -45,8 +37,6 @@ const setAuthStatus = async (req, res, next) => {
     console.error('Auth status error:', error.message);
     res.clearCookie('user');
     res.locals.isAuthenticated = false;
-    res.locals.isAdmin = false;
-    res.locals.userRole = null;
     next();
   }
 };
@@ -66,9 +56,7 @@ const requireAuth = async (req, res, next) => {
         title: 'Database Error',
         message: 'Database connection unavailable. Please try again later.',
         error: { status: 503 },
-        isAuthenticated: false,
-        isAdmin: false,
-        userRole: null
+        isAuthenticated: false
       });
     }
 
@@ -89,23 +77,7 @@ const requireAuth = async (req, res, next) => {
   }
 };
 
-// Middleware to require admin privileges
-const requireAdmin = (req, res, next) => {
-  if (!req.user || !req.user.isAdmin) {
-    return res.status(403).render('error', {
-      title: 'Access Denied',
-      message: 'Admin access required',
-      error: { status: 403 },
-      isAuthenticated: res.locals.isAuthenticated || false,
-      isAdmin: false,
-      userRole: res.locals.userRole || null
-    });
-  }
-  next();
-};
-
 module.exports = {
   setAuthStatus,
-  requireAuth,
-  requireAdmin
+  requireAuth
 };

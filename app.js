@@ -100,9 +100,7 @@ app.use((err, req, res, next) => {
     title: 'Error',
     message: 'Something went wrong!',
     error: process.env.NODE_ENV === 'development' ? err : {},
-    isAuthenticated: res.locals.isAuthenticated || false,
-    isAdmin: res.locals.isAdmin || false,
-    userRole: res.locals.isAdmin ? 'Admin' : 'User'
+    isAuthenticated: res.locals.isAuthenticated || false
   });
 });
 
@@ -128,9 +126,7 @@ app.use((req, res) => {
             stack: process.env.NODE_ENV === 'development' ? 
                 `The route ${path} is not defined in your application.` : ''
         },
-        isAuthenticated: res.locals.isAuthenticated || false,
-        isAdmin: res.locals.isAdmin || false,
-        userRole: res.locals.isAdmin ? 'Admin' : 'User'
+        isAuthenticated: res.locals.isAuthenticated || false
     });
 });
 

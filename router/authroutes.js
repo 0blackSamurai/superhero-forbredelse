@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/usermodel');
 const Superhero = require('../models/superheromodel');
-const { requireAuth, requireAdmin } = require('../middleware/authmiddleware');
+const { requireAuth } = require('../middleware/authmiddleware');
 
 const router = express.Router();
 
@@ -208,9 +208,7 @@ router.get('/', async (req, res) => {
         totalResults: 0,
         error: 'No superheroes found. Database seeding may have failed.',
         loading: false,
-        isAuthenticated: res.locals.isAuthenticated,
-        isAdmin: res.locals.isAdmin,
-        userRole: res.locals.isAdmin ? 'Admin' : 'User'
+        isAuthenticated: res.locals.isAuthenticated
       });
     }
 
@@ -223,9 +221,7 @@ router.get('/', async (req, res) => {
       totalResults: totalResults,
       error: null,
       loading: false,
-      isAuthenticated: res.locals.isAuthenticated,
-      isAdmin: res.locals.isAdmin,
-      userRole: res.locals.isAdmin ? 'Admin' : 'User'
+      isAuthenticated: res.locals.isAuthenticated
     });
   } catch (error) {
     console.error('Error loading home page:', error);
@@ -238,9 +234,7 @@ router.get('/', async (req, res) => {
       totalResults: 0,
       error: 'Failed to load superheroes: ' + error.message,
       loading: false,
-      isAuthenticated: res.locals.isAuthenticated,
-      isAdmin: res.locals.isAdmin,
-      userRole: res.locals.isAdmin ? 'Admin' : 'User'
+      isAuthenticated: res.locals.isAuthenticated
     });
   }
 });
@@ -272,9 +266,7 @@ router.get('/superhero/:id', async (req, res) => {
         title: 'Superhero Not Found',
         message: 'The requested superhero could not be found.',
         error: { status: 404 },
-        isAuthenticated: res.locals.isAuthenticated,
-        isAdmin: res.locals.isAdmin,
-        userRole: res.locals.userRole
+        isAuthenticated: res.locals.isAuthenticated
       });
     }
 
@@ -288,9 +280,7 @@ router.get('/superhero/:id', async (req, res) => {
       title: superhero.name,
       superhero: superhero,
       relatedHeroes: relatedHeroes,
-      isAuthenticated: res.locals.isAuthenticated,
-      isAdmin: res.locals.isAdmin,
-      userRole: res.locals.userRole
+      isAuthenticated: res.locals.isAuthenticated
     });
   } catch (error) {
     console.error('Error loading superhero:', error);
@@ -298,22 +288,8 @@ router.get('/superhero/:id', async (req, res) => {
       title: 'Error',
       message: 'Failed to load superhero details',
       error: error,
-      isAuthenticated: res.locals.isAuthenticated,
-      isAdmin: res.locals.isAdmin,
-      userRole: res.locals.userRole
+      isAuthenticated: res.locals.isAuthenticated
     });
-  }
-});
-
-// API endpoint to manually seed more superheroes (admin only)
-router.post('/api/seed-superheroes', requireAuth, requireAdmin, async (req, res) => {
-  try {
-    const count = parseInt(req.body.count) || 20;
-    await seedSuperheroes(count);
-    res.json({ success: true, message: `Seeded ${count} superheroes` });
-  } catch (error) {
-    console.error('Error seeding superheroes:', error);
-    res.status(500).json({ success: false, message: 'Failed to seed superheroes' });
   }
 });
 
@@ -325,9 +301,7 @@ router.get('/login', (req, res) => {
   res.render('login', {
     title: 'Login',
     error: null,
-    isAuthenticated: false,
-    isAdmin: false,
-    userRole: null
+    isAuthenticated: false
   });
 });
 
@@ -339,9 +313,7 @@ router.post('/login', async (req, res) => {
       return res.render('login', {
         title: 'Login',
         error: 'Username and password are required',
-        isAuthenticated: false,
-        isAdmin: false,
-        userRole: null
+        isAuthenticated: false
       });
     }
 
@@ -353,9 +325,7 @@ router.post('/login', async (req, res) => {
       return res.render('login', {
         title: 'Login',
         error: 'Invalid credentials',
-        isAuthenticated: false,
-        isAdmin: false,
-        userRole: null
+        isAuthenticated: false
       });
     }
 
@@ -364,17 +334,14 @@ router.post('/login', async (req, res) => {
       return res.render('login', {
         title: 'Login',
         error: 'Invalid credentials',
-        isAuthenticated: false,
-        isAdmin: false,
-        userRole: null
+        isAuthenticated: false
       });
     }
 
     const token = jwt.sign(
       { 
         userId: user._id, 
-        username: user.username,
-        isAdmin: user.isAdmin 
+        username: user.username
       },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
@@ -385,20 +352,14 @@ router.post('/login', async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000
     });
 
-    if (user.isAdmin) {
-      res.redirect('/admin/users');
-    } else {
-      res.redirect('/profile');
-    }
+    res.redirect('/profile');
 
   } catch (error) {
     console.error('Login error:', error);
     res.render('login', {
       title: 'Login',
       error: 'Server error. Please try again.',
-      isAuthenticated: false,
-      isAdmin: false,
-      userRole: null
+      isAuthenticated: false
     });
   }
 });
@@ -411,9 +372,7 @@ router.get('/register', (req, res) => {
   res.render('register', {
     title: 'Register',
     error: null,
-    isAuthenticated: false,
-    isAdmin: false,
-    userRole: null
+    isAuthenticated: false
   });
 });
 
@@ -425,9 +384,7 @@ router.post('/register', async (req, res) => {
       return res.render('register', {
         title: 'Register',
         error: 'All fields are required',
-        isAuthenticated: false,
-        isAdmin: false,
-        userRole: null
+        isAuthenticated: false
       });
     }
 
@@ -435,9 +392,7 @@ router.post('/register', async (req, res) => {
       return res.render('register', {
         title: 'Register',
         error: 'Passwords do not match',
-        isAuthenticated: false,
-        isAdmin: false,
-        userRole: null
+        isAuthenticated: false
       });
     }
 
@@ -445,9 +400,7 @@ router.post('/register', async (req, res) => {
       return res.render('register', {
         title: 'Register',
         error: 'Password must be at least 6 characters long',
-        isAuthenticated: false,
-        isAdmin: false,
-        userRole: null
+        isAuthenticated: false
       });
     }
 
@@ -459,9 +412,7 @@ router.post('/register', async (req, res) => {
       return res.render('register', {
         title: 'Register',
         error: 'Username or email already exists',
-        isAuthenticated: false,
-        isAdmin: false,
-        userRole: null
+        isAuthenticated: false
       });
     }
 
@@ -471,8 +422,7 @@ router.post('/register', async (req, res) => {
     const newUser = new User({
       username,
       epost,
-      passord: hashedPassword,
-      isAdmin: false
+      passord: hashedPassword
     });
 
     await newUser.save();
@@ -480,8 +430,7 @@ router.post('/register', async (req, res) => {
     const token = jwt.sign(
       { 
         userId: newUser._id, 
-        username: newUser.username,
-        isAdmin: newUser.isAdmin 
+        username: newUser.username
       },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
@@ -499,9 +448,7 @@ router.post('/register', async (req, res) => {
     res.render('register', {
       title: 'Register',
       error: 'Server error. Please try again.',
-      isAuthenticated: false,
-      isAdmin: false,
-      userRole: null
+      isAuthenticated: false
     });
   }
 });
@@ -511,38 +458,8 @@ router.get('/profile', requireAuth, (req, res) => {
   res.render('profile', {
     title: 'Profile',
     username: req.user.username,
-    isAuthenticated: true,
-    isAdmin: res.locals.isAdmin,
-    userRole: res.locals.isAdmin ? 'Admin' : 'User'
+    isAuthenticated: true
   });
-});
-
-// Admin users management route
-router.get('/admin/users', requireAuth, requireAdmin, async (req, res) => {
-  try {
-    const users = await User.find({}).select('-passord');
-    const superheroCount = await Superhero.countDocuments();
-    
-    res.render('adminusers', {
-      title: 'Admin - User Management',
-      username: req.user.username,
-      users: users,
-      superheroCount: superheroCount,
-      isAuthenticated: true,
-      isAdmin: true,
-      userRole: 'Admin'
-    });
-  } catch (error) {
-    console.error('Admin users error:', error);
-    res.status(500).render('error', {
-      title: 'Error',
-      message: 'Failed to load user management',
-      error: error,
-      isAuthenticated: true,
-      isAdmin: true,
-      userRole: 'Admin'
-    });
-  }
 });
 
 // Logout route
