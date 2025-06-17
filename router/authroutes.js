@@ -458,6 +458,7 @@ router.get('/profile', requireAuth, (req, res) => {
   res.render('profile', {
     title: 'Profile',
     username: req.user.username,
+    user: req.user,
     isAuthenticated: true
   });
 });

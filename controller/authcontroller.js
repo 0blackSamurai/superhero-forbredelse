@@ -1,5 +1,4 @@
 const User = require('../models/userModel');
-const Quiz = require('../models/quizModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -48,15 +47,14 @@ exports.register = async (req, res) => {
         const newUser = new User({
             username,
             epost,
-            passord: hashedPassword,
-            role: 'User' // Default role
+            passord: hashedPassword
         });
         console.log("new user",newUser)
         await newUser.save();
         console.log("new user saved")
         // Auto-login after registration
         const token = jwt.sign(
-            { userId: newUser._id, role: newUser.role },
+            { userId: newUser._id },
             process.env.JWT_SECRET,
             { expiresIn: '48h' }
         );
@@ -97,7 +95,6 @@ exports.login = async (req, res) => {
         const token = jwt.sign(
             { 
                 userId: user._id.toString(), // Ensure userId is a string
-                role: user.role,
                 username: user.username,
                 email: user.epost // Include email in the token
             },
@@ -114,12 +111,7 @@ exports.login = async (req, res) => {
             maxAge: 48 * 60 * 60 * 1000 // 48 hours
         });
         
-        // Redirect based on role
-        if (user.role === 'Admin') {
-            return res.redirect('/admin/users');
-        } else {
-            return res.redirect('/profile');
-        }
+        return res.redirect('/profile');
     } catch (error) {
         console.error('Login error:', error);
         res.render('login', {
@@ -176,8 +168,7 @@ exports.forgotPassword = async (req, res) => {
             });
         }
         
-        // In a real application, we would generate a token and send an email
-        // For this demo, we'll just return a success message
+     
         return res.status(200).json({
             success: true,
             message: 'If an account with that email exists, you will receive password reset instructions.'
@@ -204,15 +195,9 @@ exports.renderProfilePage = async (req, res) => {
             });
         }
         
-        // Get user's quizzes for profile page
-        const userQuizzes = await Quiz.find({ createdBy: req.user.userId })
-            .sort({ updatedAt: -1 })
-            .limit(5); // Just get the most recent ones for the profile page
-        
         res.render('profile', {
             title: 'Your Profile',
-            user,
-            userQuizzes
+            user
         });
     } catch (error) {
         console.error('Error rendering profile page:', error);
