@@ -37,7 +37,79 @@
                     </a>
                 <% } %>
             </form>
-            
+                                      <% if (isAuthenticated && favoriteHeroes && favoriteHeroes.length > 0) { %>
+                                    <section class="favorites-top-section" aria-labelledby="top-favorites-heading">
+                                        <h2 id="top-favorites-heading">⭐ Dine favoritthelter</h2>
+                                        <div class="favorites-top-grid">
+                                            <% favoriteHeroes.forEach(hero => { %>
+                                                <article class="favorite-top-card" 
+                                                        onclick="window.location.href='/superhero/<%= hero.apiId %>'"
+                                                        onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero.apiId %>'}"
+                                                        tabindex="0"
+                                                        role="button"
+                                                        aria-label="Se detaljer for <%= hero.name %>">
+                                                    
+                                                    <div class="favorite-top-image-container">
+                                                        <img src="<%= hero.image %>" 
+                                                             alt="Bilde av <%= hero.name %>" 
+                                                             class="favorite-top-image"
+                                                             loading="eager"
+                                                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjZmZkNzAwLCAjZmY5NTAwKSIvPjx0ZXh0IHg9Ijc1IiB5PSI2NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjMwIiBmaWxsPSJ3aGl0ZSI+⭐</dGV4dD48dGV4dCB4PSI3NSIgeT0iMTAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IndoaXRlIj5GYXZvcml0dDwvdGV4dD48L3N2Zz4=';this.alt='Favoritt superhelt'">
+                                                        
+                                                        <span class="favorite-top-badge" aria-label="Favoritt">❤️</span>
+                                                    </div>
+                                                    
+                                                    <h3 class="favorite-top-name"><%= hero.name %></h3>
+                                                    <p class="favorite-top-publisher"><%= hero.publisher %></p>
+                                                </article>
+                                            <% }) %>
+                                        </div>
+                                        <div class="favorites-top-link">
+                                            <a href="/profile" class="view-all-favorites-btn">Se alle favoritter →</a>
+                                        </div>
+                                    </section>
+                                <% } %>
+                        
+                                <!-- Results Info -->
+                                <% if (typeof req !== 'undefined' && req.query && req.query.rerolled) { %>
+                                    <div class="success-message" role="alert">
+                                        ✅ Superhelter byttet ut! Nye helter er lastet inn.
+                                    </div>
+                                <% } %>
+                                
+                                <% if (typeof req !== 'undefined' && req.query && req.query.error === 'reroll_failed') { %>
+                                    <div class="error-message" role="alert">
+                                        ❌ Kunne ikke bytte ut superhelter. Prøv igjen senere.
+                                    </div>
+                                <% } %>
+                        
+                                <% if (typeof loading !== 'undefined' && loading) { %>
+                                    <div class="loading" role="status" aria-live="polite">
+                                        🚀 Laster superheltdatabase... Dette kan ta litt tid ved første besøk.
+                                        <br><small>Henter helter fra Superhero API...</small>
+                                    </div>
+                                <% } else if (totalResults !== undefined) { %>
+                                    <div class="results-info" role="status" aria-live="polite">
+                                        <% if (search) { %>
+                                            Fant <%= totalResults %> superhelt<%= totalResults !== 1 ? 'er' : '' %> som matcher "<%= search %>"
+                                        <% } else { %>
+                                            Viser <%= totalResults %> superhelt<%= totalResults !== 1 ? 'er' : '' %> totalt
+                                            <% if (superheroes && superheroes.length > 0) { %>
+                                                (viser <%= superheroes.length %> på side <%= currentPage %> av <%= totalPages %>)
+                                            <% } %>
+                                        <% } %>
+                                    </div>
+                                <% } %>
+                        
+                                
+                        
+                                <% if (error) { %>
+                                    <div class="error-message" role="alert">
+                                        <%= error %>
+                                    </div>
+                                <% } %>
+
+
             <!-- Reroll Section -->
             <div class="reroll-section">
                 <h3 class="reroll-title">🎲 Oppdater superheltsamlingen</h3>
@@ -76,7 +148,7 @@
                         <div class="modal-details">
                             <div class="modal-detail-item">
                                 <span class="detail-icon">🗑️</span>
-                                <span>Dette vil fjerne alle nåværende helter</span>
+                                      <span>Dette vil fjerne alle nåværende helter</span>
                             </div>
                             <div class="modal-detail-item">
                                 <span class="detail-icon">🔄</span>
@@ -161,77 +233,6 @@
         </section>
 
         <!-- Favorites Section - Show only if authenticated and has favorites -->
-        <% if (isAuthenticated && favoriteHeroes && favoriteHeroes.length > 0) { %>
-            <section class="favorites-top-section" aria-labelledby="top-favorites-heading">
-                <h2 id="top-favorites-heading">⭐ Dine favoritthelter</h2>
-                <div class="favorites-top-grid">
-                    <% favoriteHeroes.forEach(hero => { %>
-                        <article class="favorite-top-card" 
-                                onclick="window.location.href='/superhero/<%= hero.apiId %>'"
-                                onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero.apiId %>'}"
-                                tabindex="0"
-                                role="button"
-                                aria-label="Se detaljer for <%= hero.name %>">
-                            
-                            <div class="favorite-top-image-container">
-                                <img src="<%= hero.image %>" 
-                                     alt="Bilde av <%= hero.name %>" 
-                                     class="favorite-top-image"
-                                     loading="eager"
-                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjZmZkNzAwLCAjZmY5NTAwKSIvPjx0ZXh0IHg9Ijc1IiB5PSI2NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjMwIiBmaWxsPSJ3aGl0ZSI+⭐</dGV4dD48dGV4dCB4PSI3NSIgeT0iMTAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IndoaXRlIj5GYXZvcml0dDwvdGV4dD48L3N2Zz4=';this.alt='Favoritt superhelt'">
-                                
-                                <span class="favorite-top-badge" aria-label="Favoritt">❤️</span>
-                            </div>
-                            
-                            <h3 class="favorite-top-name"><%= hero.name %></h3>
-                            <p class="favorite-top-publisher"><%= hero.publisher %></p>
-                        </article>
-                    <% }) %>
-                </div>
-                <div class="favorites-top-link">
-                    <a href="/profile" class="view-all-favorites-btn">Se alle favoritter →</a>
-                </div>
-            </section>
-        <% } %>
-
-        <!-- Results Info -->
-        <% if (typeof req !== 'undefined' && req.query && req.query.rerolled) { %>
-            <div class="success-message" role="alert">
-                ✅ Superhelter byttet ut! Nye helter er lastet inn.
-            </div>
-        <% } %>
-        
-        <% if (typeof req !== 'undefined' && req.query && req.query.error === 'reroll_failed') { %>
-            <div class="error-message" role="alert">
-                ❌ Kunne ikke bytte ut superhelter. Prøv igjen senere.
-            </div>
-        <% } %>
-
-        <% if (typeof loading !== 'undefined' && loading) { %>
-            <div class="loading" role="status" aria-live="polite">
-                🚀 Laster superheltdatabase... Dette kan ta litt tid ved første besøk.
-                <br><small>Henter helter fra Superhero API...</small>
-            </div>
-        <% } else if (totalResults !== undefined) { %>
-            <div class="results-info" role="status" aria-live="polite">
-                <% if (search) { %>
-                    Fant <%= totalResults %> superhelt<%= totalResults !== 1 ? 'er' : '' %> som matcher "<%= search %>"
-                <% } else { %>
-                    Viser <%= totalResults %> superhelt<%= totalResults !== 1 ? 'er' : '' %> totalt
-                    <% if (superheroes && superheroes.length > 0) { %>
-                        (viser <%= superheroes.length %> på side <%= currentPage %> av <%= totalPages %>)
-                    <% } %>
-                <% } %>
-            </div>
-        <% } %>
-
-        
-
-        <% if (error) { %>
-            <div class="error-message" role="alert">
-                <%= error %>
-            </div>
-        <% } %>
 
         <% if (superheroes && superheroes.length > 0) { %>
             <section aria-labelledby="heroes-heading">
