@@ -26,9 +26,9 @@
     <div class="favorites-section">
         <h2>❤️ Mine favoritthelter</h2>
         
-        <% if (favoriteHeroes && favoriteHeroes.length > 0) { %>
+        <% if (Favorite && Favorite.length > 0) { %>
             <div class="favorites-grid">
-                <% favoriteHeroes.forEach(hero => { %>
+                <% Favorite.forEach(hero => { %>
                     <article class="favorite-card" 
                             onclick="window.location.href='/superhero/<%= hero.apiId %>'"
                             onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero.apiId %>'}"

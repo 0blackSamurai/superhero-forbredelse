@@ -1,8 +1,6 @@
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const Favorite = require('../models/favoritemodel');
-const Superhero = require('../models/superheromodel');
 
 exports.register = async (req, res) => {
     console.log("hei")
@@ -197,17 +195,23 @@ exports.renderProfilePage = async (req, res) => {
             });
         }
         
-        // Get user's favorite heroes
-        const favorites = await Favorite.find({ userId: user._id })
+        // Fetch user's favorites
+        const Favorite = require('../models/favoritemodel');
+        const favorites = await Favorite.find({ userId: req.user.userId })
             .populate('superheroId')
             .sort({ createdAt: -1 });
         
-        const favoriteHeroes = favorites.map(fav => fav.superheroId).filter(hero => hero !== null);
+        // Extract the superhero data from favorites
+        const favoriteHeroes = favorites
+            .map(fav => fav.superheroId)
+            .filter(hero => hero !== null);
         
         res.render('profile', {
             title: 'Your Profile',
             user,
-            favoriteHeroes
+            username: user.username,
+            Favorite: favoriteHeroes,
+            isAuthenticated: true
         });
     } catch (error) {
         console.error('Error rendering profile page:', error);
