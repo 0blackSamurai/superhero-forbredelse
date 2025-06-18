@@ -40,15 +40,124 @@
             
             <!-- Reroll Section -->
             <div class="reroll-section">
-                <form method="POST" action="/reroll" style="display: inline;">
-                    <button type="submit" class="reroll-btn" onclick="return confirm('Er du sikker på at du vil bytte ut alle superhelter? Dette vil fjerne alle nåværende helter og laste inn nye (Thor, Spider-Man, Batman, Iron Man og Superman vil alltid være med).')" aria-label="Bytt ut alle superhelter med nye">
-                        🎲 Bytt superhelter
+                <h3 class="reroll-title">🎲 Oppdater superheltsamlingen</h3>
+                <p class="reroll-description">
+                    Ønsker du nye superhelter? Bytt ut den nåværende samlingen med helt nye tilfeldige helter fra universet!
+                </p>
+                
+                <form method="POST" action="/reroll" style="display: inline;" id="rerollForm">
+                    <button type="button" class="reroll-btn-enhanced" id="rerollButton" 
+                            onclick="showRerollModal()"
+                            aria-label="Bytt ut alle superhelter med nye tilfeldige helter">
+                        <span class="reroll-icon">🎲</span>
+                        <span class="reroll-text">Bytt superhelter</span>
+                        <span class="reroll-loader" style="display: none;">
+                            <span class="spinner"></span>
+                            Laster...
+                        </span>
                     </button>
                 </form>
-                <small class="reroll-help">
-                    Bytter ut alle superhelter med nye tilfeldige helter. Thor, Spider-Man, Batman, Iron Man og Superman vil alltid være inkludert.
-                </small>
+                
+                
             </div>
+
+            <!-- Reroll Confirmation Modal -->
+            <div id="rerollModal" class="modal-overlay" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>🎲 Bytt superhelter?</h3>
+                        <button class="modal-close" onclick="hideRerollModal()" aria-label="Lukk dialog">×</button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div class="modal-icon">🎯</div>
+                        <p class="modal-description">Du er i ferd med å bytte ut alle superhelter med nye tilfeldige helter.</p>
+                        
+                        <div class="modal-details">
+                            <div class="modal-detail-item">
+                                <span class="detail-icon">🗑️</span>
+                                <span>Dette vil fjerne alle nåværende helter</span>
+                            </div>
+                            <div class="modal-detail-item">
+                                <span class="detail-icon">🔄</span>
+                                <span>Nye tilfeldige helter blir lastet inn</span>
+                            </div>
+                            <div class="modal-detail-item">
+                                <span class="detail-icon">⭐</span>
+                                <span>Thor, Spider-Man, Batman, Iron Man og Superman vil alltid være med</span>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-warning">
+                            <strong>⚠️ Advarsel:</strong> Denne handlingen kan ikke angres!
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button class="modal-btn modal-btn-cancel" onclick="hideRerollModal()">
+                            Avbryt
+                        </button>
+                        <button class="modal-btn modal-btn-confirm" onclick="confirmReroll()">
+                            🎲 Ja, bytt superhelter
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                function showRerollModal() {
+                    document.getElementById('rerollModal').style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Focus trap
+                    const modal = document.getElementById('rerollModal');
+                    const focusableElements = modal.querySelectorAll('button');
+                    focusableElements[1].focus(); // Focus on cancel button
+                }
+                
+                function hideRerollModal() {
+                    document.getElementById('rerollModal').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    document.getElementById('rerollButton').focus();
+                }
+                
+                function confirmReroll() {
+                    const button = document.getElementById('rerollButton');
+                    const text = button.querySelector('.reroll-text');
+                    const loader = button.querySelector('.reroll-loader');
+                    const icon = button.querySelector('.reroll-icon');
+                    
+                    // Hide modal
+                    hideRerollModal();
+                    
+                    // Show loading state
+                    button.disabled = true;
+                    button.classList.add('loading');
+                    text.style.display = 'none';
+                    icon.style.display = 'none';
+                    loader.style.display = 'flex';
+                    
+                    // Add loading animation to the button
+                    button.style.animation = 'pulse 2s infinite';
+                    
+                    // Submit the form
+                    document.getElementById('rerollForm').submit();
+                }
+                
+                // Close modal on escape key
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape') {
+                        hideRerollModal();
+                    }
+                });
+                
+                // Close modal on background click
+                document.getElementById('rerollModal').addEventListener('click', function(event) {
+                    if (event.target === this) {
+                        hideRerollModal();
+                    }
+                });
+            </script>
         </section>
 
         <!-- Favorites Section - Show only if authenticated and has favorites -->
@@ -145,7 +254,7 @@
                                 
                                 <% if (isAuthenticated) { %>
                                     <button class="favorite-btn <%= userFavorites.includes(hero.apiId) ? 'favorited' : '' %>" 
-                                            onclick="event.stopPropagation(); toggleFavorite(<%= hero.apiId %>, this)"
+                                            onclick="event.stopPropagation(); toggleFavorite(<%=hero.apiId %>, this)"
                                             aria-label="<%= userFavorites.includes(hero.apiId) ? 'Fjern fra favoritter' : 'Legg til favoritter' %>"
                                             title="<%= userFavorites.includes(hero.apiId) ? 'Fjern fra favoritter' : 'Legg til favoritter' %>">
                                         <span class="heart-icon">❤️</span>
@@ -155,6 +264,39 @@
                             
                             <h3 class="hero-name"><%= hero.name %></h3>
                             <p class="hero-publisher">Utgiver: <%= hero.publisher %></p>
+                            
+                            <%
+                            // Find the best powerstat
+                            const stats = {
+                                intelligence: parseInt(hero.powerstats.intelligence) || 0,
+                                strength: parseInt(hero.powerstats.strength) || 0,
+                                speed: parseInt(hero.powerstats.speed) || 0,
+                                durability: parseInt(hero.powerstats.durability) || 0,
+                                power: parseInt(hero.powerstats.power) || 0,
+                                combat: parseInt(hero.powerstats.combat) || 0
+                            };
+                            
+                            const maxValue = Math.max(...Object.values(stats));
+                            const bestStat = Object.keys(stats).find(key => stats[key] === maxValue);
+                            
+                            // Create display names for stats
+                            const statNames = {
+                                intelligence: 'Intelligens',
+                                strength: 'Styrke',
+                                speed: 'Hastighet',
+                                durability: 'Utholdenhet',
+                                power: 'Kraft',
+                                combat: 'Kamp'
+                            };
+                            %>
+                            
+                            <% if (maxValue > 0) { %>
+                                <div class="best-stat-indicator">
+                                    <span class="best-icon">👑</span>
+                                    <span class="best-text">Best i: <%= statNames[bestStat] %></span>
+                                    <span class="best-value">(<%= maxValue %>)</span>
+                                </div>
+                            <% } %>
                             
                             <div class="powerstats" aria-label="Kraftstatistikk for <%= hero.name %>">
                                 <div class="powerstat">

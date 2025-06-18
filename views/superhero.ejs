@@ -57,40 +57,73 @@
                     <section class="powerstats-section" aria-labelledby="powers-heading">
                         <h2 id="powers-heading">Kraftstatistikk</h2>
                         <div class="powerstats-grid">
-                            <div class="powerstat-card">
+                            <%
+                            // Find the best powerstat
+                            const stats = {
+                                intelligence: parseInt(superhero.powerstats.intelligence) || 0,
+                                strength: parseInt(superhero.powerstats.strength) || 0,
+                                speed: parseInt(superhero.powerstats.speed) || 0,
+                                durability: parseInt(superhero.powerstats.durability) || 0,
+                                power: parseInt(superhero.powerstats.power) || 0,
+                                combat: parseInt(superhero.powerstats.combat) || 0
+                            };
+                            
+                            const maxValue = Math.max(...Object.values(stats));
+                            const bestStat = Object.keys(stats).find(key => stats[key] === maxValue);
+                            %>
+                            
+                            <div class="powerstat-card <%= bestStat === 'intelligence' ? 'best-stat-card' : '' %>">
                                 <div class="powerstat-label">Intelligens</div>
                                 <div class="powerstat-value" aria-label="<%= superhero.powerstats.intelligence %> av 100">
                                     <%= superhero.powerstats.intelligence %>
+                                    <% if (bestStat === 'intelligence' && maxValue > 0) { %>
+                                        <div class="best-badge">👑 BEST</div>
+                                    <% } %>
                                 </div>
                             </div>
-                            <div class="powerstat-card">
+                            <div class="powerstat-card <%= bestStat === 'strength' ? 'best-stat-card' : '' %>">
                                 <div class="powerstat-label">Styrke</div>
                                 <div class="powerstat-value" aria-label="<%= superhero.powerstats.strength %> av 100">
                                     <%= superhero.powerstats.strength %>
+                                    <% if (bestStat === 'strength' && maxValue > 0) { %>
+                                        <div class="best-badge">👑 BEST</div>
+                                    <% } %>
                                 </div>
                             </div>
-                            <div class="powerstat-card">
+                            <div class="powerstat-card <%= bestStat === 'speed' ? 'best-stat-card' : '' %>">
                                 <div class="powerstat-label">Hastighet</div>
                                 <div class="powerstat-value" aria-label="<%= superhero.powerstats.speed %> av 100">
                                     <%= superhero.powerstats.speed %>
+                                    <% if (bestStat === 'speed' && maxValue > 0) { %>
+                                        <div class="best-badge">👑 BEST</div>
+                                    <% } %>
                                 </div>
                             </div>
-                            <div class="powerstat-card">
+                            <div class="powerstat-card <%= bestStat === 'durability' ? 'best-stat-card' : '' %>">
                                 <div class="powerstat-label">Utholdenhet</div>
                                 <div class="powerstat-value" aria-label="<%= superhero.powerstats.durability %> av 100">
                                     <%= superhero.powerstats.durability %>
+                                    <% if (bestStat === 'durability' && maxValue > 0) { %>
+                                        <div class="best-badge">👑 BEST</div>
+                                    <% } %>
                                 </div>
                             </div>
-                            <div class="powerstat-card">
+                            <div class="powerstat-card <%= bestStat === 'power' ? 'best-stat-card' : '' %>">
                                 <div class="powerstat-label">Kraft</div>
                                 <div class="powerstat-value" aria-label="<%= superhero.powerstats.power %> av 100">
                                     <%= superhero.powerstats.power %>
+                                    <% if (bestStat === 'power' && maxValue > 0) { %>
+                                        <div class="best-badge">👑 BEST</div>
+                                    <% } %>
                                 </div>
                             </div>
-                            <div class="powerstat-card">
+                            <div class="powerstat-card <%= bestStat === 'combat' ? 'best-stat-card' : '' %>">
                                 <div class="powerstat-label">Kamp</div>
                                 <div class="powerstat-value" aria-label="<%= superhero.powerstats.combat %> av 100">
                                     <%= superhero.powerstats.combat %>
+                                    <% if (bestStat === 'combat' && maxValue > 0) { %>
+                                        <div class="best-badge">👑 BEST</div>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>

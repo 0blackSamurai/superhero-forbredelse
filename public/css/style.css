@@ -885,6 +885,285 @@ body {
     color: #667eea;
 }
 
+/* Best powerstat styling for hero cards */
+.powerstat.best-stat {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    border: 2px solid #ff6b6b;
+    position: relative;
+    animation: bestStatGlow 2s ease-in-out infinite alternate;
+}
+
+.powerstat.best-stat .powerstat-value {
+    color: #fff;
+    font-weight: 900;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.best-label {
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+    animation: bestLabelPulse 1.5s ease-in-out infinite;
+}
+
+/* Best powerstat styling for detail page cards */
+.powerstat-card.best-stat-card {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    border: 3px solid #ff6b6b;
+    transform: scale(1.1);
+    z-index: 2;
+    position: relative;
+    animation: bestCardGlow 2s ease-in-out infinite alternate;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+}
+
+.powerstat-card.best-stat-card .powerstat-label {
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.powerstat-card.best-stat-card .powerstat-value {
+    color: #fff;
+    font-weight: 900;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    font-size: 1.8rem;
+}
+
+.best-badge {
+    font-size: 0.7rem;
+    color: #fff;
+    font-weight: 700;
+    margin-top: 0.3rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    animation: bestBadgePulse 1.5s ease-in-out infinite;
+    letter-spacing: 1px;
+}
+
+/* Animations for best stats */
+@keyframes bestStatGlow {
+    0% { 
+        box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        border-color: #ff6b6b;
+    }
+    100% { 
+        box-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+        border-color: #ff8a8a;
+    }
+}
+
+@keyframes bestCardGlow {
+    0% { 
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        border-color: #ff6b6b;
+    }
+    100% { 
+        box-shadow: 0 15px 40px rgba(255, 107, 107, 0.7);
+        border-color: #ff8a8a;
+    }
+}
+
+@keyframes bestLabelPulse {
+    0%, 100% { 
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+@keyframes bestBadgePulse {
+    0%, 100% { 
+        opacity: 0.9;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+/* Hover effects for best stats */
+.powerstat.best-stat:hover {
+    background: linear-gradient(135deg, #ee5a6f 0%, #dc3545 100%);
+    transform: scale(1.05);
+}
+
+.powerstat-card.best-stat-card:hover {
+    background: linear-gradient(135deg, #ee5a6f 0%, #dc3545 100%);
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 0 20px 50px rgba(255, 107, 107, 0.6);
+}
+
+/* Best stat indicator styling */
+.best-stat-indicator {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    animation: bestIndicatorGlow 2s ease-in-out infinite alternate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.best-stat-indicator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: bestIndicatorShine 3s ease-in-out infinite;
+}
+
+.best-icon {
+    font-size: 1rem;
+    animation: crownPulse 2s ease-in-out infinite;
+}
+
+.best-text {
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.best-value {
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.8rem;
+}
+
+/* Animations for best stat indicator */
+@keyframes bestIndicatorGlow {
+    0% { 
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+    100% { 
+        box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        border-color: rgba(255, 255, 255, 0.4);
+    }
+}
+
+@keyframes bestIndicatorShine {
+    0% { left: -100%; }
+    50% { left: -100%; }
+    100% { left: 100%; }
+}
+
+@keyframes crownPulse {
+    0%, 100% { 
+        transform: scale(1);
+    }
+    50% { 
+        transform: scale(1.2);
+    }
+}
+
+/* Hover effects for best stat indicator */
+.superhero-card:hover .best-stat-indicator {
+    background: linear-gradient(135deg, #ee5a6f 0%, #dc3545 100%);
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+}
+
+/* Mobile responsive adjustments for best stat indicator */
+@media (max-width: 768px) {
+    .best-stat-indicator {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+        border-radius: 12px;
+        gap: 0.2rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .best-icon {
+        font-size: 0.9rem;
+    }
+    
+    .best-value {
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .best-stat-indicator {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+        border-radius: 10px;
+        gap: 0.15rem;
+        margin-bottom: 0.6rem;
+        flex-direction: column;
+    }
+    
+    .best-icon {
+        font-size: 0.8rem;
+    }
+    
+    .best-value {
+        font-size: 0.7rem;
+    }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .powerstat-card.best-stat-card {
+        transform: scale(1.05);
+    }
+    
+    .powerstat-card.best-stat-card:hover {
+        transform: scale(1.08) translateY(-3px);
+    }
+    
+    .best-badge {
+        font-size: 0.65rem;
+        margin-top: 0.2rem;
+    }
+    
+    .best-label {
+        font-size: 0.55rem;
+        margin-top: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .powerstat-card.best-stat-card {
+        transform: scale(1.02);
+    }
+    
+    .powerstat-card.best-stat-card:hover {
+        transform: scale(1.05) translateY(-2px);
+    }
+    
+    .powerstat-card.best-stat-card .powerstat-value {
+        font-size: 1.5rem;
+    }
+    
+    .best-badge {
+        font-size: 0.6rem;
+    }
+    
+    .best-label {
+        font-size: 0.5rem;
+    }
+}
+
 /* Messages and alerts - Dark theme */
 .error-message {
     background: rgba(220, 53, 69, 0.2);
@@ -1740,30 +2019,266 @@ body {
     margin-right: auto;
 }
 
-/* Responsive reroll button */
+/* Enhanced Reroll section styling */
+.reroll-section {
+    margin-top: 2rem;
+    padding: 2rem;
+    border-top: 2px solid rgba(255, 107, 107, 0.3);
+    text-align: center;
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.05) 0%, rgba(238, 90, 111, 0.05) 100%);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.reroll-title {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.reroll-description {
+    color: #e0e0e0;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reroll-btn-enhanced {
+    position: relative;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    min-width: 200px;
+    font-size: 1.1rem;
+    overflow: hidden;
+    border: 3px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.reroll-btn-enhanced::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+.reroll-btn-enhanced:hover::before {
+    left: 100%;
+}
+
+.reroll-btn-enhanced:hover {
+    background: linear-gradient(135deg, #ee5a6f 0%, #dc3545 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.reroll-btn-enhanced:active {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+}
+
+.reroll-btn-enhanced.loading {
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+}
+
+.reroll-btn-enhanced.loading:hover {
+    transform: none;
+    background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+}
+
+.reroll-icon {
+    font-size: 1.3rem;
+    animation: rotate 2s ease-in-out infinite;
+}
+
+.reroll-text {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.reroll-loader {
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.reroll-info {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.reroll-guarantee {
+    background: rgba(76, 175, 80, 0.2);
+    color: #81c784;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    font-size: 0.95rem;
+    max-width: 500px;
+    backdrop-filter: blur(10px);
+}
+
+.reroll-warning {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffcc02;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    max-width: 400px;
+    backdrop-filter: blur(10px);
+}
+
+/* Animations */
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(90deg); }
+    50% { transform: rotate(180deg); }
+    75% { transform: rotate(270deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4); }
+    50% { box-shadow: 0 8px 25px rgba(255, 107, 107, 0.8); }
+    100% { box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4); }
+}
+
+/* Responsive enhanced reroll button */
 @media (max-width: 768px) {
-    .reroll-btn {
-        padding: 0.7rem 1.5rem;
-        font-size: 0.95rem;
-        min-width: 140px;
+    .reroll-section {
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+        border-radius: 12px;
     }
     
-    .reroll-help {
-        font-size: 0.8rem;
+    .reroll-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .reroll-description {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
         padding: 0 1rem;
+    }
+    
+    .reroll-btn-enhanced {
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+        min-width: 180px;
+        border-radius: 25px;
+    }
+    
+    .reroll-icon {
+        font-size: 1.2rem;
+    }
+    
+    .reroll-info {
+        margin-top: 1.5rem;
+        gap: 0.8rem;
+    }
+    
+    .reroll-guarantee,
+    .reroll-warning {
+        padding: 0.8rem 1rem;
+        font-size: 0.9rem;
+        margin: 0 1rem;
     }
 }
 
 @media (max-width: 480px) {
-    .reroll-btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-        min-width: 120px;
+    .reroll-section {
+        padding: 1.2rem;
+        margin-top: 1.2rem;
+        border-radius: 10px;
     }
     
-    .reroll-section {
-        margin-top: 1rem;
-        padding-top: 1rem;
+    .reroll-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .reroll-description {
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+        padding: 0 0.5rem;
+    }
+    
+    .reroll-btn-enhanced {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+        min-width: 160px;
+        border-radius: 20px;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+    
+    .reroll-icon {
+        font-size: 1.1rem;
+    }
+    
+    .reroll-loader {
+        flex-direction: column;
+        gap: 0.3rem;
+        font-size: 0.9rem;
+    }
+    
+    .spinner {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .reroll-info {
+        margin-top: 1.2rem;
+        gap: 0.6rem;
+    }
+    
+    .reroll-guarantee,
+    .reroll-warning {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+        margin: 0 0.5rem;
+        border-radius: 8px;
     }
 }
 
@@ -2719,5 +3234,373 @@ body {
     
     .favorite-top-image {
         height: 140px;
+    }
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: modalFadeIn 0.3s ease;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 107, 107, 0.3);
+    backdrop-filter: blur(20px);
+    animation: modalSlideIn 0.3s ease;
+    position: relative;
+    margin: auto;
+}
+
+.modal-header {
+    padding: 2rem 2rem 1rem 2rem;
+    border-bottom: 1px solid rgba(255, 107, 107, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.modal-close {
+    background: rgba(255, 107, 107, 0.2);
+    border: 2px solid rgba(255, 107, 107, 0.3);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #ff6b6b;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.modal-close:hover {
+    background: rgba(255, 107, 107, 0.4);
+    border-color: #ff6b6b;
+    transform: scale(1.1);
+    color: #fff;
+}
+
+.modal-body {
+    padding: 1.5rem 2rem;
+    text-align: center;
+}
+
+.modal-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: modalIconPulse 2s ease-in-out infinite;
+}
+
+.modal-description {
+    color: #e0e0e0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.modal-details {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+}
+
+.modal-detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.modal-detail-item:last-child {
+    margin-bottom: 0;
+}
+
+.detail-icon {
+    font-size: 1.2rem;
+    min-width: 24px;
+    text-align: center;
+}
+
+.modal-warning {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffcc02;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+}
+
+.modal-footer {
+    padding: 1rem 2rem 2rem 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.modal-btn {
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    min-width: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.modal-btn:hover::before {
+    left: 100%;
+}
+
+.modal-btn-cancel {
+    background: rgba(108, 117, 125, 0.8);
+    color: #fff;
+    border: 2px solid rgba(108, 117, 125, 0.5);
+}
+
+.modal-btn-cancel:hover {
+    background: rgba(108, 117, 125, 1);
+    border-color: #6c757d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+}
+
+.modal-btn-confirm {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    border: 2px solid rgba(255, 107, 107, 0.5);
+}
+
+.modal-btn-confirm:hover {
+    background: linear-gradient(135deg, #ee5a6f 0%, #dc3545 100%);
+    border-color: #ff6b6b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* Modal Animations */
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modalSlideIn {
+    from { 
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes modalIconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 0.5rem;
+    }
+    
+    .modal-content {
+        width: 100%;
+        border-radius: 15px;
+        max-height: calc(100vh - 1rem);
+    }
+    
+    .modal-header {
+        padding: 1.5rem 1.5rem 1rem 1.5rem;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .modal-close {
+        width: 36px;
+        height: 36px;
+        font-size: 1.3rem;
+    }
+    
+    .modal-body {
+        padding: 1rem 1.5rem;
+    }
+    
+    .modal-icon {
+        font-size: 3rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .modal-description {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .modal-details {
+        padding: 1.2rem;
+        margin-bottom: 1.2rem;
+        border-radius: 10px;
+    }
+    
+    .modal-detail-item {
+        gap: 0.8rem;
+        margin-bottom: 0.8rem;
+        font-size: 0.9rem;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .detail-icon {
+        font-size: 1.1rem;
+        min-width: 20px;
+    }
+    
+    .modal-warning {
+        padding: 0.8rem;
+        font-size: 0.85rem;
+        border-radius: 8px;
+    }
+    
+    .modal-footer {
+        padding: 1rem 1.5rem 1.5rem 1.5rem;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    
+    .modal-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.95rem;
+        min-width: auto;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-overlay {
+        padding: 0.25rem;
+    }
+    
+    .modal-content {
+        width: 100%;
+        border-radius: 12px;
+        max-height: calc(100vh - 0.5rem);
+    }
+    
+    .modal-header {
+        padding: 1.2rem 1.2rem 0.8rem 1.2rem;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .modal-close {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+    }
+    
+    .modal-body {
+        padding: 0.8rem 1.2rem;
+    }
+    
+    .modal-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.6rem;
+    }
+    
+    .modal-description {
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .modal-details {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+    
+    .modal-detail-item {
+        gap: 0.6rem;
+        margin-bottom: 0.6rem;
+        font-size: 0.85rem;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .detail-icon {
+        font-size: 1rem;
+        min-width: 18px;
+    }
+    
+    .modal-warning {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+        border-radius: 6px;
+    }
+    
+    .modal-footer {
+        padding: 0.8rem 1.2rem 1.2rem 1.2rem;
+        gap: 0.6rem;
+    }
+    
+    .modal-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        border-radius: 10px;
     }
 }
