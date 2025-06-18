@@ -2426,3 +2426,298 @@ body {
         margin-top: 0.5rem;
     }
 }
+
+/* FAVORITES TOP SECTION ON INDEX PAGE - NEW STYLES */
+.favorites-top-section {
+    background: rgba(255, 107, 107, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.1);
+}
+
+.favorites-top-section h2 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.favorites-top-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.favorite-top-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    padding: 1.2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 107, 107, 0.2);
+    overflow: hidden;
+    text-align: center;
+}
+
+.favorite-top-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(238, 90, 111, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.favorite-top-card:hover::before {
+    opacity: 1;
+}
+
+.favorite-top-card:hover,
+.favorite-top-card:focus {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(255, 107, 107, 0.3);
+    border-color: rgba(255, 107, 107, 0.5);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.favorite-top-card:focus {
+    outline: 3px solid #ff6b6b;
+    outline-offset: 3px;
+}
+
+.favorite-top-image-container {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.favorite-top-image {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 2px solid rgba(255, 107, 107, 0.2);
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.favorite-top-card:hover .favorite-top-image {
+    border-color: #ff6b6b;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+}
+
+.favorite-top-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 107, 107, 0.9);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.favorite-top-name {
+    color: #fff;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    line-height: 1.3;
+}
+
+.favorite-top-publisher {
+    color: #ff6b6b;
+    margin: 0;
+    font-size: 0.9rem;
+    font-style: italic;
+    font-weight: 600;
+}
+
+.favorites-top-link {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+.view-all-favorites-btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.view-all-favorites-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.view-all-favorites-btn:hover::before {
+    left: 100%;
+}
+
+.view-all-favorites-btn:hover,
+.view-all-favorites-btn:focus {
+    background: linear-gradient(135deg, #ee5a6f 0%, #dc3545 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
+    border-color: #ff6b6b;
+    color: white;
+    outline: 2px solid #ff6b6b;
+    outline-offset: 2px;
+}
+
+/* Responsive favorites top section */
+@media (max-width: 768px) {
+    .favorites-top-section {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 15px;
+    }
+    
+    .favorites-top-section h2 {
+        margin-bottom: 1.5rem;
+        font-size: 1.4rem;
+    }
+    
+    .favorites-top-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .favorite-top-card {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+    
+    .favorite-top-image {
+        height: 150px;
+        border-radius: 10px;
+        padding: 0.3rem;
+    }
+    
+    .favorite-top-badge {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+        top: 6px;
+        right: 6px;
+    }
+    
+    .favorite-top-name {
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+    }
+    
+    .favorite-top-publisher {
+        font-size: 0.85rem;
+    }
+    
+    .view-all-favorites-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.95rem;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .favorites-top-section {
+        padding: 1.2rem;
+        margin-bottom: 1.2rem;
+        border-radius: 12px;
+    }
+    
+    .favorites-top-section h2 {
+        margin-bottom: 1.2rem;
+        font-size: 1.2rem;
+    }
+    
+    .favorites-top-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .favorite-top-card {
+        padding: 0.8rem;
+        border-radius: 10px;
+    }
+    
+    .favorite-top-image {
+        height: 120px;
+        border-radius: 8px;
+        padding: 0.2rem;
+    }
+    
+    .favorite-top-badge {
+        width: 26px;
+        height: 26px;
+        font-size: 0.8rem;
+        top: 5px;
+        right: 5px;
+    }
+    
+    .favorite-top-name {
+        font-size: 0.95rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .favorite-top-publisher {
+        font-size: 0.8rem;
+    }
+    
+    .view-all-favorites-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+        border-radius: 15px;
+    }
+}
+
+@media (max-width: 360px) {
+    .favorites-top-grid {
+        grid-template-columns: 1fr;
+        max-width: 250px;
+        margin: 0 auto 1rem auto;
+    }
+    
+    .favorite-top-card {
+        padding: 0.7rem;
+    }
+    
+    .favorite-top-image {
+        height: 140px;
+    }
+}

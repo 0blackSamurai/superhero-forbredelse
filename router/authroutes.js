@@ -215,6 +215,30 @@ router.get('/', async (req, res) => {
       }
     }
 
+    // Fetch user's favorite superheroes if authenticated
+    let favoriteHeroes = [];
+    if (res.locals.isAuthenticated && res.locals.username) {
+      try {
+        // Get the user from the auth middleware's work
+        const user = await User.findOne({ username: res.locals.username });
+        if (user) {
+          console.log(`Fetching favorites for user: ${user._id}`);
+          const favorites = await Favorite.find({ userId: user._id })
+            .populate('superheroId')
+            .sort({ createdAt: -1 })
+            .limit(10); // Show max 10 favorites
+          
+          favoriteHeroes = favorites
+            .map(fav => fav.superheroId)
+            .filter(hero => hero !== null);
+            
+          console.log(`Found ${favoriteHeroes.length} favorite heroes for user`);
+        }
+      } catch (favoriteError) {
+        console.error('Error fetching favorites:', favoriteError);
+      }
+    }
+
     // Build search query
     let query = {};
     if (search) {
@@ -248,6 +272,7 @@ router.get('/', async (req, res) => {
       return res.render('index', {
         title: 'Superhero Explorer',
         superheroes: [],
+        favoriteHeroes: favoriteHeroes,
         currentPage: 1,
         totalPages: 1,
         search: search,
@@ -261,6 +286,7 @@ router.get('/', async (req, res) => {
     res.render('index', {
       title: 'Superhero Explorer',
       superheroes: superheroes,
+      favoriteHeroes: favoriteHeroes,
       currentPage: page,
       totalPages: totalPages,
       search: search,
@@ -274,6 +300,7 @@ router.get('/', async (req, res) => {
     res.render('index', {
       title: 'Superhero Explorer',
       superheroes: [],
+      favoriteHeroes: [],
       currentPage: 1,
       totalPages: 1,
       search: '',
@@ -564,10 +591,6 @@ router.post('/reroll', async (req, res) => {
 
 // Favorite routes - using the new controller
 router.post('/favorite/:apiId', requireAuth, favoriteController.toggleFavorite);
-router.get('/api/favorites', requireAuth, favoriteController.getUserFavorites);
-router.get('/api/favorites/ids', requireAuth, favoriteController.getUserFavoriteIds);
-router.delete('/api/favorites/multiple', requireAuth, favoriteController.removeMultipleFavorites);
-router.get('/api/favorites/check/:apiId', requireAuth, favoriteController.checkFavoriteStatus);
-router.get('/api/favorites/stats', requireAuth, favoriteController.getFavoriteStats);
+
 
 module.exports = router;
