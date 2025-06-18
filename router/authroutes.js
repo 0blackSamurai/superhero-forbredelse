@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/usermodel');
 const Superhero = require('../models/superheromodel');
+const Favorite = require('../models/favoritemodel');
 const { requireAuth } = require('../middleware/authmiddleware');
 
 const router = express.Router();
@@ -535,6 +536,86 @@ router.post('/reroll', async (req, res) => {
   } catch (error) {
     console.error('Error during reroll:', error);
     res.redirect('/?error=reroll_failed');
+  }
+});
+
+// Add/Remove favorite route
+router.post('/favorite/:apiId', requireAuth, async (req, res) => {
+  try {
+    const superheroApiId = parseInt(req.params.apiId);
+    const userId = req.user._id;
+
+    // Check if superhero exists in our database
+    let superhero = await Superhero.findOne({ apiId: superheroApiId });
+    
+    if (!superhero) {
+      // Fetch and store superhero if not in database
+      superhero = await fetchAndStoreSuperhero(superheroApiId);
+      if (!superhero) {
+        return res.status(404).json({ 
+          success: false, 
+          message: 'Superhero not found' 
+        });
+      }
+    }
+
+    // Check if already favorited
+    const existingFavorite = await Favorite.findOne({ 
+      userId: userId, 
+      superheroApiId: superheroApiId 
+    });
+
+    if (existingFavorite) {
+      // Remove from favorites
+      await Favorite.deleteOne({ _id: existingFavorite._id });
+      return res.json({ 
+        success: true, 
+        action: 'removed',
+        message: 'Removed from favorites' 
+      });
+    } else {
+      // Add to favorites
+      const newFavorite = new Favorite({
+        userId: userId,
+        superheroId: superhero._id,
+        superheroApiId: superheroApiId
+      });
+      
+      await newFavorite.save();
+      return res.json({ 
+        success: true, 
+        action: 'added',
+        message: 'Added to favorites' 
+      });
+    }
+  } catch (error) {
+    console.error('Error managing favorite:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error' 
+    });
+  }
+});
+
+// Get user's favorites (API endpoint)
+router.get('/api/favorites', requireAuth, async (req, res) => {
+  try {
+    const favorites = await Favorite.find({ userId: req.user._id })
+      .populate('superheroId')
+      .sort({ createdAt: -1 });
+    
+    const favoriteHeroes = favorites.map(fav => fav.superheroId).filter(hero => hero !== null);
+    
+    res.json({ 
+      success: true, 
+      favorites: favoriteHeroes 
+    });
+  } catch (error) {
+    console.error('Error fetching favorites:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error' 
+    });
   }
 });
 

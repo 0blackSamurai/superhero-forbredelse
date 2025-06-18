@@ -21,7 +21,129 @@
             <a href="/logout" class="btn btn-danger">🚪 Logg ut</a>
         </div>
     </div>
+    
+    <!-- Favorite Heroes Section -->
+    <div class="favorites-section">
+        <h2>❤️ Mine favoritthelter</h2>
+        
+        <% if (favoriteHeroes && favoriteHeroes.length > 0) { %>
+            <div class="favorites-grid">
+                <% favoriteHeroes.forEach(hero => { %>
+                    <article class="favorite-card" 
+                            onclick="window.location.href='/superhero/<%= hero.apiId %>'"
+                            onkeydown="if(event.key==='Enter'||event.key===' '){window.location.href='/superhero/<%= hero.apiId %>'}"
+                            tabindex="0"
+                            role="button"
+                            aria-label="Se detaljer for <%= hero.name %>">
+                        
+                        <div class="favorite-image-container">
+                            <img src="<%= hero.image %>" 
+                                 alt="Bilde av <%= hero.name %>" 
+                                 class="favorite-image"
+                                 loading="lazy"
+                                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSJsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjNjY3ZWVhLCAjNzY0YmEyKSIvPjx0ZXh0IHg9IjEwMCIgeT0iOTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0id2hpdGUiPvCfpbg8L3RleHQ+PHRleHQgeD0iMTAwIiB5PSIxMzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0id2hpdGUiPkluZ2VuIGJpbGRlPC90ZXh0Pjwvc3ZnPg==';this.alt='Ingen bilde tilgjengelig for <%= hero.name %>'">
+                            
+                            <button class="remove-favorite-btn" 
+                                    onclick="event.stopPropagation(); removeFavorite(<%= hero.apiId %>, this.closest('.favorite-card'))"
+                                    aria-label="Fjern <%= hero.name %> fra favoritter"
+                                    title="Fjern fra favoritter">
+                                ✕
+                            </button>
+                        </div>
+                        
+                        <div class="favorite-info">
+                            <h3 class="favorite-name"><%= hero.name %></h3>
+                            <p class="favorite-publisher"><%= hero.publisher %></p>
+                        </div>
+                    </article>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="no-favorites">
+                <div class="no-favorites-icon">💔</div>
+                <h3>Ingen favoritthelter ennå</h3>
+                <p>Gå til <a href="/">hjemmesiden</a> og klikk på hjertet for å legge til dine favoritthelter!</p>
+            </div>
+        <% } %>
+    </div>
 </div>
+
+<script>
+    async function removeFavorite(apiId, cardElement) {
+        try {
+            const response = await fetch(`/favorite/${apiId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            const result = await response.json();
+            
+            if (result.success && result.action === 'removed') {
+                // Animate card removal
+                cardElement.style.animation = 'fadeOut 0.5s ease';
+                setTimeout(() => {
+                    cardElement.remove();
+                    
+                    // Check if no favorites left
+                    const remainingCards = document.querySelectorAll('.favorite-card');
+                    if (remainingCards.length === 0) {
+                        location.reload(); // Reload to show "no favorites" message
+                    }
+                }, 500);
+                
+                showNotification('Fjernet fra favoritter');
+            }
+        } catch (error) {
+            console.error('Error removing favorite:', error);
+            showNotification('Feil ved fjerning av favoritt', 'error');
+        }
+    }
+    
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'error' ? '#ff6b6b' : '#51cf66'};
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+    
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.8); }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
 
 </main>
 </body>
